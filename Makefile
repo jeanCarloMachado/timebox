@@ -1,0 +1,2 @@
+build:
+	lein figwheel

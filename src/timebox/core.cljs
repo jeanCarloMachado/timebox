@@ -1,21 +1,38 @@
 (ns timebox.core
-    (:require [reagent.core :as reagent :refer [atom]]))
+    (:require [reagent.core :as r :refer [atom]]))
 
 (enable-console-print!)
 
-(println "This text is printed from src/timebox/core.cljs. Go ahead and edit it and see reloading in action.")
+(println "console.log")
 
 ;; define your app data so that it doesn't get over-written on reload
 
 (defonce app-state (atom {:text "Hello world!"}))
 
 
-(defn hello-world []
-  [:div
-   [:h1 (:text @app-state)]
-   [:h3 "Edit this and watch it change!"]])
+(def timer-running (atom false))
 
-(reagent/render-component [hello-world]
+
+(defn timer-component []
+ (let [seconds-elapsed (atom  0)]
+   (fn []
+     (js/setTimeout #(swap! seconds-elapsed inc) 1000)
+     [:div
+      @seconds-elapsed
+      ]
+     )
+   )
+  )
+
+(defn root []
+
+  [:div
+   [:input {:type "button" :value (if @timer-running "Stop" "Start") :on-click #(swap! timer-running not)}]
+   [:div (when @timer-running [timer-component])]
+   [:input {:type "text" :value "Timebox description"}]
+   ])
+
+(r/render-component [root]
                           (. js/document (getElementById "app")))
 
 (defn on-js-reload []
