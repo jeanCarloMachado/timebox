@@ -1,10 +1,15 @@
 (ns timebox.core
-    (:require [react-dom]))
+    (:require [react :refer [createElement]]
+              [react-dom :refer [render]]))
+
+
+(def appDiv (.getElementById js/document "app"))
+
+(render
+  (createElement "h1" nil "Hello World! jean")
+  appDiv)
+
+
 
 (enable-console-print!)
-
-(println "This text is printed from src/timebox/core.cljs. Go ahead and edit it and see reloading in action.")
-
-(.render js/ReactDOM
-  (.createElement js/React "h2" nil "Hello, React 22!")
-  (.getElementById js/document "app"))
+(println "Console.log")
