@@ -21,11 +21,17 @@
   )
 (def timer-stop #(reset! timer-running false))
 
+
+(defn button-style []
+  {:min-height "25px" :min-width "60px"}
+)
+
+
 (defn root []
   [:div {:style {:display "flex" :justify-content "center" :align-items "center" :height "100%"}}
    [:div {:style {:background "#cccccc" :min-height "400px" :min-width "400px"}}
-   (when (not @timer-running) [:input {:type "button" :value "Start" :on-click timer-start }])
-   (when (= true @timer-running) [:input {:type "button" :value "Stop" :on-click timer-stop }])
+   (when (not @timer-running) [:input {:style (button-style) :type "button" :value "Start" :on-click timer-start }])
+   (when (= true @timer-running) [:input {:style (button-style) :type "button" :value "Stop" :on-click timer-stop }])
    (when (= true @timer-running) [:p @seconds-counter])
    ]
    ])
