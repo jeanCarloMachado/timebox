@@ -22,11 +22,12 @@
 (def timer-stop #(reset! timer-running false))
 
 (defn root []
-
-  [:div
+  [:div {:style {:display "flex" :justify-content "center" :align-items "center" :height "100%"}}
+   [:div {:style {:background "#cccccc" :min-height "400px" :min-width "400px"}}
    (when (not @timer-running) [:input {:type "button" :value "Start" :on-click timer-start }])
    (when (= true @timer-running) [:input {:type "button" :value "Stop" :on-click timer-stop }])
-   [:div [:p @seconds-counter]]
+   (when (= true @timer-running) [:p @seconds-counter])
+   ]
    ])
 
 (r/render-component [root]
