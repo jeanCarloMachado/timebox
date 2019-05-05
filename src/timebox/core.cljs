@@ -14,6 +14,10 @@
 (defonce timebox-in-minutes (atom 0))
 (defonce time-updater (js/setInterval #(swap! seconds-counter inc) 1000))
 
+; ---
+
+
+
 (defn create-notification [title msg]
   (js/Notification. title #js {:body msg}))
 
@@ -24,7 +28,7 @@
                                           (if (= permission "granted")
                                             (create-notification title msg))))))
 
-; ---
+(. (js/Audio. "bell.mp3") (play))
 
 (defn timer-start []
   (reset! timer-running true)
@@ -45,7 +49,7 @@
 )
 
 (defn manage_end [percentage_ellapsed]
- (if (= 100 percentage_ellapsed) (show-desktop-notification "Timebox is over" ""))
+ (if (> percentage_ellapsed 100) (show-desktop-notification "Timebox is over" ""))
  percentage_ellapsed
 )
 
