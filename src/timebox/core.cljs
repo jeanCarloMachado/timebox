@@ -7,29 +7,26 @@
 
 ;; define your app data so that it doesn't get over-written on reload
 
-(defonce app-state (atom {:text "Hello world!"}))
+;;(defonce app-state (atom {:text "Hello world!"}))
+(defonce seconds-counter (atom 0))
+(defonce timer-running (atom false))
+(defonce time-updater (js/setInterval #(swap! seconds-counter inc) 1000))
 
 
-(def timer-running (atom false))
+; ---
 
-
-(defn timer-component []
- (let [seconds-elapsed (atom  0)]
-   (fn []
-     (js/setTimeout #(swap! seconds-elapsed inc) 1000)
-     [:div
-      @seconds-elapsed
-      ]
-     )
-   )
+(defn timer-start []
+  (reset! timer-running true)
+  (reset! seconds-counter 0)
   )
+(def timer-stop #(reset! timer-running false))
 
 (defn root []
 
   [:div
-   [:input {:type "button" :value (if @timer-running "Stop" "Start") :on-click #(swap! timer-running not)}]
-   [:div (when @timer-running [timer-component])]
-   [:input {:type "text" :value "Timebox description"}]
+   (when (not @timer-running) [:input {:type "button" :value "Start" :on-click timer-start }])
+   (when (= true @timer-running) [:input {:type "button" :value "Stop" :on-click timer-stop }])
+   [:div [:p @seconds-counter]]
    ])
 
 (r/render-component [root]
