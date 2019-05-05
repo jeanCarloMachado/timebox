@@ -28,7 +28,6 @@
                                           (if (= permission "granted")
                                             (create-notification title msg))))))
 
-(. (js/Audio. "bell.mp3") (play))
 
 (defn timer-start []
   (reset! timer-running true)
@@ -50,6 +49,7 @@
 
 (defn manage_end [percentage_ellapsed]
  (if (> percentage_ellapsed 100) (show-desktop-notification "Timebox is over" ""))
+ (if (> percentage_ellapsed 100) (. (js/Audio. "bell.mp3") (play)))
  percentage_ellapsed
 )
 
