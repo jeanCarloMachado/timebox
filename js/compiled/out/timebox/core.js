@@ -38,6 +38,7 @@ return null;
 }));
 }
 });
+(new Audio("bell.mp3")).play();
 timebox.core.timer_start = (function timebox$core$timer_start(){
 cljs.core.reset_BANG_.call(null,timebox.core.timer_running,true);
 
@@ -46,8 +47,8 @@ return cljs.core.reset_BANG_.call(null,timebox.core.seconds_counter,(0));
 timebox.core.timer_stop = (function timebox$core$timer_stop(){
 return cljs.core.reset_BANG_.call(null,timebox.core.timer_running,false);
 });
-timebox.core.minutes_to_seconds = (function timebox$core$minutes_to_seconds(p1__27904_SHARP_){
-return (p1__27904_SHARP_ * (60));
+timebox.core.minutes_to_seconds = (function timebox$core$minutes_to_seconds(p1__27544_SHARP_){
+return (p1__27544_SHARP_ * (60));
 });
 timebox.core.percentage_ellapsed = (function timebox$core$percentage_ellapsed(seconds_ellapsed,timebox_in_minutes){
 return ((((100) * seconds_ellapsed) / timebox.core.minutes_to_seconds.call(null,timebox_in_minutes)) | (0));
@@ -58,7 +59,7 @@ cljs.core.reset_BANG_.call(null,timebox.core.timebox_in_minutes,e.target.value);
 return timebox.core.timer_stop.call(null);
 });
 timebox.core.manage_end = (function timebox$core$manage_end(percentage_ellapsed){
-if(cljs.core._EQ_.call(null,(100),percentage_ellapsed)){
+if((percentage_ellapsed > (100))){
 timebox.core.show_desktop_notification.call(null,"Timebox is over","");
 } else {
 }
@@ -79,4 +80,4 @@ timebox.core.on_js_reload = (function timebox$core$on_js_reload(){
 return null;
 });
 
-//# sourceMappingURL=core.js.map?rel=1557056145136
+//# sourceMappingURL=core.js.map?rel=1557059292514
