@@ -28,15 +28,19 @@
                                           (if (= permission "granted")
                                             (create-notification title msg))))))
 
+(defn notify-end []
+ (show-desktop-notification "Timebox is over" "")
+ (. (js/Audio. "bell.mp3") (play))
+ )
+
+(def  minutes_to_seconds #(* %1 60))
 
 (defn timer-start []
   (reset! timer-running true)
   (reset! seconds-counter 0)
-  )
+  (js/setTimeout #(notify-end) (* 1000 (minutes_to_seconds @timebox-in-minutes)))
 (def timer-stop #(reset! timer-running false))
-
-
-(def  minutes_to_seconds #(* %1 60))
+)
 
 (defn percentage_ellapsed [seconds-ellapsed timebox-in-minutes]
   (int (/ (* 100 seconds-ellapsed) (minutes_to_seconds timebox-in-minutes)))
@@ -45,12 +49,6 @@
 (defn change_timebox [e]
  (reset! timebox-in-minutes (.. e -target -value))
  (timer-stop)
-)
-
-(defn manage_end [percentage_ellapsed]
- (if (> percentage_ellapsed 100) (show-desktop-notification "Timebox is over" ""))
- (if (> percentage_ellapsed 100) (. (js/Audio. "bell.mp3") (play)))
- percentage_ellapsed
 )
 
 (defn style_input []
@@ -63,11 +61,11 @@
 
 (defn root []
   [:div {:style {:display "flex" :justify-content "center" :align-items "center" :height "100%"}}
-   [:div {:style {:background "#cccccc" :min-height "400px" :min-width "400px" :display "flex" :justify-content "center" :align-items "center" :flex-direction "column" }}
+   [:div {:style {:background "#b9c1ce" :min-height "400px" :min-width "400px" :display "flex" :justify-content "center" :align-items "center" :flex-direction "column" }}
    [:input {:type "text" :placeholder "Timebox size in minutes" :value @timebox-in-minutes :on-change change_timebox :style (style_input) } ]
-   (when (not @timer-running) [:input {:style (button_style) :type "button" :value "Start" :on-click timer-start }])
+   (when (not @timer-running) [:input {:style (button_style) :type "button" :value "Start" :on-click #(timer-start) }])
    (when (= true @timer-running) [:input {:style (button_style) :type "button" :value "Stop" :on-click timer-stop }])
-   (when (= true @timer-running) [:p (str "Percentage ellapsed: " (manage_end (percentage_ellapsed @seconds-counter @timebox-in-minutes) ) " %")])
+   (when (= true @timer-running) [:p (str "Percentage ellapsed: " (percentage_ellapsed @seconds-counter @timebox-in-minutes)  " %")])
    ]
    ])
 
